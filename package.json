@@ -45,8 +45,5 @@
   },
   "engines": {
     "node": ">=22"
-  },
-  "np": {
-    "tests": false
   }
 }
