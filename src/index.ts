@@ -15,8 +15,10 @@ dotenv.config({ quiet: true });
 const program = new Command();
 
 // Configuration - load from environment variables
+const GITHUB_ORG = process.env.BRANCH_SYNC_GITHUB_ORG || "";
 const GITHUB_OWNER = process.env.BRANCH_SYNC_GITHUB_OWNER || "";
 const GITHUB_TOKEN = process.env.BRANCH_SYNC_GITHUB_TOKEN || "";
+const OWNER = GITHUB_ORG || GITHUB_OWNER;
 
 // Function to check if .env file exists
 function checkEnvFile(): boolean {
@@ -26,15 +28,15 @@ function checkEnvFile(): boolean {
 
 // Function to validate environment variables
 function validateEnv(): boolean {
-  if (!GITHUB_OWNER) {
+  if (!OWNER) {
     console.error(
       chalk.red(
-        "❌ BRANCH_SYNC_GITHUB_OWNER not found in environment variables"
+        "❌ Neither BRANCH_SYNC_GITHUB_ORG nor BRANCH_SYNC_GITHUB_OWNER found in environment variables"
       )
     );
     console.error(
       chalk.yellow(
-        "Please set BRANCH_SYNC_GITHUB_OWNER in your .env file or as environment variable"
+        "Please set either BRANCH_SYNC_GITHUB_ORG or BRANCH_SYNC_GITHUB_OWNER in your .env file or as environment variable"
       )
     );
     return false;
@@ -72,20 +74,28 @@ const octokit = new Octokit({ auth: GITHUB_TOKEN });
 interface Repository {
   name: string;
   defaultBranch: string;
+  full_name: string;
 }
 
 async function getRepositories(): Promise<Repository[]> {
   try {
-    const repos = await octokit.paginate(octokit.rest.repos.listForOrg, {
-      org: GITHUB_OWNER,
-      username: GITHUB_OWNER,
-      per_page: 100,
-      sort: "full_name",
-    });
+    const repos = !!GITHUB_ORG
+      ? await octokit.paginate(octokit.rest.repos.listForOrg, {
+          org: OWNER,
+          username: OWNER,
+          per_page: 100,
+          sort: "full_name",
+        })
+      : await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser, {
+          username: OWNER,
+          per_page: 100,
+          sort: "full_name",
+        });
 
     return repos.map((repo) => ({
       name: repo.name,
       defaultBranch: repo.default_branch ?? "main",
+      full_name: repo.full_name,
     }));
   } catch (error) {
     console.error(chalk.red("Failed to fetch repositories:"), error);
@@ -99,17 +109,17 @@ async function createBranch(
 ): Promise<void> {
   try {
     const { data: refData } = await octokit.rest.git.getRef({
-      owner: GITHUB_OWNER,
+      owner: OWNER,
       repo: repoName,
       ref: `heads/${
         (
-          await octokit.rest.repos.get({ owner: GITHUB_OWNER, repo: repoName })
+          await octokit.rest.repos.get({ owner: OWNER, repo: repoName })
         ).data.default_branch
       }`,
     });
 
     await octokit.rest.git.createRef({
-      owner: GITHUB_OWNER,
+      owner: OWNER,
       repo: repoName,
       ref: `refs/heads/${branchName}`,
       sha: refData.object.sha,
@@ -129,7 +139,7 @@ async function selectRepositories(repos: Repository[]): Promise<Repository[]> {
       name: "selectedRepos",
       message: "Select repositories:",
       choices: repos.map((repo) => ({
-        name: `${repo.name} (${repo.defaultBranch})`,
+        name: `${repo.full_name} (${repo.defaultBranch})`,
         value: repo,
       })),
       pageSize: 15,
