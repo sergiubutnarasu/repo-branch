@@ -1,10 +1,10 @@
 {
-  "name": "branch-sync",
+  "name": "repo-branch",
   "version": "0.0.2",
   "description": "Create branches across multiple GitHub repositories simultaneously",
   "main": "dist/index.js",
   "bin": {
-    "branch-sync": "dist/index.js"
+    "repo-branch": "dist/index.js"
   },
   "files": [
     "dist/**/*"
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sergiubutnarasu/branch-sync.git"
+    "url": "git+https://github.com/sergiubutnarasu/repo-branch.git"
   },
   "scripts": {
     "build": "tsc",

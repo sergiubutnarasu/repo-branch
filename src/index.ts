@@ -200,7 +200,7 @@ async function run(branchName: string, repoNames?: string[]) {
 }
 
 program
-  .name("branch-sync")
+  .name("repo-branch")
   .description("Create a branch across multiple GitHub repositories")
   .argument("<branch-name>", "name of the branch to create")
   .argument("[repositories...]", "repositories to create branch in")
