@@ -80,7 +80,7 @@ async function getRepositories(): Promise<Repository[]> {
       org: GITHUB_OWNER,
       username: GITHUB_OWNER,
       per_page: 100,
-      sort: "updated",
+      sort: "full_name",
     });
 
     return repos.map((repo) => ({
