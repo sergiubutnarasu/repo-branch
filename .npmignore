@@ -1,0 +1,13 @@
+src/
+tsconfig.json
+.git/
+.github/
+*.md
+.editorconfig
+.gitignore
+.env
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
