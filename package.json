@@ -1,6 +1,6 @@
 {
   "name": "branch-sync",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Create branches across multiple GitHub repositories simultaneously",
   "main": "dist/index.js",
   "bin": {
