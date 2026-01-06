@@ -35,12 +35,12 @@
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",
     "inquirer": "^13.1.0",
-    "listr": "^0.14.3",
-    "ts-node": "^10.9.2"
+    "listr": "^0.14.3"
   },
   "devDependencies": {
     "@types/listr": "^0.14.10",
     "@types/node": "^25.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "engines": {
