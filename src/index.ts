@@ -76,7 +76,8 @@ interface Repository {
 
 async function getRepositories(): Promise<Repository[]> {
   try {
-    const repos = await octokit.paginate(octokit.rest.repos.listForUser, {
+    const repos = await octokit.paginate(octokit.rest.repos.listForOrg, {
+      org: GITHUB_OWNER,
       username: GITHUB_OWNER,
       per_page: 100,
       sort: "updated",
