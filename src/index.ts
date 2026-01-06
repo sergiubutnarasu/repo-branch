@@ -10,7 +10,7 @@ import * as path from "path";
 import * as fs from "fs";
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const program = new Command();
 
@@ -28,7 +28,9 @@ function checkEnvFile(): boolean {
 function validateEnv(): boolean {
   if (!GITHUB_OWNER) {
     console.error(
-      chalk.red("❌ BRANCH_SYNC_GITHUB_OWNER not found in environment variables")
+      chalk.red(
+        "❌ BRANCH_SYNC_GITHUB_OWNER not found in environment variables"
+      )
     );
     console.error(
       chalk.yellow(
@@ -40,7 +42,9 @@ function validateEnv(): boolean {
 
   if (!GITHUB_TOKEN) {
     console.error(
-      chalk.red("❌ BRANCH_SYNC_GITHUB_TOKEN not found in environment variables")
+      chalk.red(
+        "❌ BRANCH_SYNC_GITHUB_TOKEN not found in environment variables"
+      )
     );
     console.error(
       chalk.yellow(
