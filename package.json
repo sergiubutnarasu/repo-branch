@@ -1,6 +1,6 @@
 {
   "name": "repo-branch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Create branches across multiple GitHub repositories simultaneously",
   "main": "dist/index.js",
   "bin": {
